@@ -1,0 +1,104 @@
+ <?php
+ $title = 'Book List';
+ $this->headTitle($title);
+ ?>
+<div class="row">
+    <div class="col-md-12">
+        <h3><?php echo $this->escapeHtml($title); ?></h3>
+        <?php
+if($this->flashMessenger()->render('error')!='') 
+{
+    echo '<div class="alert alert-error">'.$this->flashMessenger()->render('error').'</div>';
+}
+if($this->flashMessenger()->render('success')!='') 
+{
+    echo '<div class="alert alert-success">'.$this->flashMessenger()->render('success').'</div>';
+}
+if($this->flashMessenger()->render('info')!='') 
+{
+    echo '<div class="alert alert-info">'.$this->flashMessenger()->render('info').'</div>';
+}
+?>
+<script type="text/javascript">
+    $('document').ready(function()
+ {
+
+       $('#checkout').click(function() {
+                $('#sendform').submit();
+        });
+   });
+</script>
+<style type="text/css">
+    
+    .dataTables_filter input.form-control {
+    font-size: 13px;
+    width: 491px !important;
+    height: 38px;
+    display: inline;
+    margin-right: 215px;
+    border: 3px solid #ccc;
+}
+</style>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <?php echo $this->translate('Results: ') ?><?php echo $this->escapeHtml(count($library));?>
+               <div style="float:right;font-size:12px;margin-top: -6px;">                    
+                    <a class="btn btn-primary" href="<?php echo $this->url('library', array('action'=>'checkin'));?>">Check in</a>                   
+                </div>  
+            </div>
+            <table class="table <?php if(count($library)>0): echo 'pagination-table'; endif;?>">
+              <thead>
+                 <tr class="panel panel-default">
+                         <th class="panel-heading">Book ID</th>
+                         <th class="panel-heading">Book Title</th>
+                         <th class="panel-heading">Author Name</th>
+                         <th class="panel-heading">Branch ID</th>
+                         <th class="panel-heading">Publisher</th>
+                         <th class="panel-heading">No.Of Copies</th>
+                         <th class="panel-heading" >Action</th>
+                          
+                 </tr>
+                 </thead>
+                 <tbody>	
+                 <?php
+                 if(count($library)>0) { foreach ($library as $librarys) : ?>
+                    <tr class="panel panel-default">
+                        <td><?php echo $librarys->book_id;?></td> 
+                         <td><?php echo $librarys->title;?></td>  
+                         <td><?php echo $librarys->author_name;?></td> 
+                         <td><?php echo $librarys->branch_id;?></td> 
+                         <td><?php echo $librarys->publisher;?></td>
+                         <td><?php echo $librarys->no_of_copies;?></td> 
+                         <td id="data-sorter-false">
+
+                            <?php 
+                            if ($librarys->no_of_copies == 0 ){ ?>
+                                <a class="btn btn-default" disabled href="<?php echo $this->url('library',array('action'=>'checkout', 'id' => $librarys['book_id']));?>" title="Preview">Checkout</a>
+                            <?php } else { ?>
+                            <?php
+                                $url = $this->url(
+                                    'library',
+                                    array('action' => 'checkout'),
+                                    array(
+                                        'query' => array(
+                                            'book_id' =>  $librarys->book_id,
+                                            'branch_id' =>  $librarys->branch_id,
+                                        )
+                                    )
+                                );
+                    ?>
+                            <a class="btn btn-success" id="checkout" href="<?php echo $url; ?>" title="Checkout">Checkout</a>&nbsp;
+                           
+                            <?php }  ?>
+                        </td>                          
+                    </tr>
+                 <?php endforeach; } else { ?>
+                 <tr class="panel panel-default">
+                        <td colspan="7" class="align-center"><?php echo $this->escapeHtml('No Records..');?></td>    
+                 </tr>
+                 <?php } ?>
+                 </tbody>
+             </table>	
+        </div>
+    </div> 
+ </div>

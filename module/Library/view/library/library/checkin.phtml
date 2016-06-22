@@ -1,0 +1,47 @@
+<?php
+$title = 'Checkout Book ';
+$this->headTitle($title);
+?>
+<h3><?php echo $this->escapeHtml($title); ?></h3>
+<script type="text/javascript">
+$(document).ready(function(){                      
+        $("input[name='date_in']").datepicker({
+             dateFormat: 'yy-mm-dd',
+             changeMonth: true,
+             changeYear: true             
+        });
+    }); 
+    </script>
+<?php
+$form = $this->form;
+$form->setAttribute('action', $this->url('library',array('action' => 'checkin')));
+$form->prepare();
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('book_id')); ?>
+<table class="table-form">
+    <tr>                 
+        <td class="title"><?php echo $this->formLabel($form->get('book_id')); ?></td>
+        <td><?php echo $this->formText($form->get('book_id')); ?></td>
+    </tr>
+    <tr>                 
+        <td class="title"><?php echo $this->formLabel($form->get('branch_id')); ?></td>
+        <td><?php echo $this->formText($form->get('branch_id')); ?></td>
+    </tr> 
+    <tr>                 
+        <td class="title"><?php echo $this->formLabel($form->get('card_no')); ?></td>
+        <td><?php echo $this->formText($form->get('card_no')); ?></td>
+    </tr>
+    <tr>                 
+        <td class="title"><?php echo $this->formLabel($form->get('date_in')); ?></td>
+        <td><?php echo $this->formText($form->get('date_in')); ?></td>
+    </tr>    
+    <tr>
+        <td>&nbsp;</td>
+        <td>
+            <?php echo $this->formSubmit($form->get('submit')); ?>&nbsp;&nbsp;
+            <a href="<?php echo $this->url('library');?>" class="btn btn-large btn-primary">Cancel</a>
+        </td>
+    </tr>   
+</table>
+
+<?php echo $this->form()->closeTag(); ?>
